@@ -11,6 +11,9 @@ Backend will be written in Python, and send a string with the following structur
     \tActive AI Buffs <- list of strings
 ### From Frontend
 Ability
+### Synchronization
+Using a mutex as the first line of the file. If 0, write state and switch to 1.
 
+If 1, write output and switch to 0
 # Rules
 Buffs will last for 3 rounds

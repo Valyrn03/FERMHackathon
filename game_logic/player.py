@@ -8,6 +8,7 @@ ability_list = ["Attack", "Defend", "Strong Attack", "Debuff Defense", "Debuff A
 
 class Player:
     hit_points: int = 50
+    # Tracking whether debuff or not
     buffs: list[tuple[str, int]] = []
     def __init__(self):
         self.hit_points = random.randint(40, 60)
