@@ -39,7 +39,7 @@ const writeFile = (ability) => {
 
   const renderPlayerArea = (playerName, hitPoints, isHuman) => {
     return (
-      <div className="stat-bar" onClick={() => writeFile()}>
+      <div className="stat-bar">
         <h2>{playerName}</h2>
         <h4>{hitPoints}</h4>
         {isHuman && (
