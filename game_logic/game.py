@@ -1,5 +1,6 @@
 # Handles the game loop
 import json
+import random
 
 from game_logic.player import Player, pull_abilities
 from writer import write_file
@@ -34,23 +35,42 @@ def send_to_frontend():
 
 def receive_from_frontend(ai_action: str, json_user_input: str):
     chosen_ability = json.loads(json_user_input)[0]
-    action: str = get_ai_action("")
+    if previous_action.startswith("Buff") or previous_action.startswith("Debuff"):
+        process_input_from_ai(previous_action)
     if chosen_ability[0].starts_with("Buff") or chosen_ability[0].starts_with("Debuff"):
-        process_input(chosen_ability[0])
-    elif action is "Attack" and chosen_ability[0] is "Defend":
-        # Handle
-    elif action is "Defend" and chosen_ability[0] is "Attack":
-        # Handle
-    elif action is "Attack" and chosen_ability[0] is "Attack":
-        # Handle
+        process_input_from_player(chosen_ability[0])
+    elif previous_action is "Attack" and chosen_ability[0] is "Defend":
+        # AI is attacking player
+        ai_roll = roll() + ai_player.getAttack()
+        player_roll = roll() + player.getDefense()
+        if ai_roll > player_roll:
+            player.take_damage(ai_roll - player_roll)
+    elif previous_action is "Defend" and chosen_ability[0] is "Attack":
+        # Player is attacking AI
+        ai_roll = roll() + ai_player.getDefense()
+        player_roll = roll() + player.getAttack()
+        if player_roll > ai_roll:
+            ai_player.take_damage(player_roll - ai_roll)
+    elif previous_action is "Attack" and chosen_ability[0] is "Attack":
+        player.take_damage(roll() + ai_player.getAttack())
+        ai_player.take_damage(roll() + player.getAttack())
 
-def process_input(input: str):
+def process_input_from_player(input: str):
     if input.startswith("Buff"):
         player.add_buff(input.split(" ")[1])
     elif input.startswith("Debuff"):
         ai_player.add_buff(input.split(" ")[1])
 
+def process_input_from_ai(input: str):
+    if input.startswith("Buff"):
+        ai_player.add_buff(input.split(" ")[1])
+    elif input.startswith("Debuff"):
+        player.add_buff(input.split(" ")[1])
+
 def get_ai_action(action: str):
     previous_action = action
+
+def roll():
+    return random.randint(1, 10)
 
 print(send_to_frontend())
