@@ -3,7 +3,7 @@ import json
 import random
 
 from game_logic.player import Player, pull_abilities
-from writer import write_file
+from writer import write_file, read_file
 
 player = Player()
 ai_player = Player()
@@ -22,19 +22,17 @@ previous_action: str = ""
     \tActive AI Buffs <- list of strings
 '''
 def send_to_frontend():
-    message = []
-    message.append(str(player.hit_points))
-    message.append(str(pull_abilities()))
-    message.append(str([buff[0] for buff in player.buffs]))
-    message.append(previous_action)
-    message.append(str([buff[0] for buff in ai_player.buffs]))
+    message = {}
+    message["player_hp"] = player.hit_points
+    message["abilities"] = pull_abilities()
+    message["player_buffs"] = [buff[0] for buff in player.buffs]
+    message["ai_action"] = previous_action
+    message["ai_buffs"] = [buff[0] for buff in ai_player.buffs]
 
-    state: int = write_file(json.dumps(message))
-    while state == 1:
-        write_file(json.dumps(message))
+    write_file(message)
 
-def receive_from_frontend(ai_action: str, json_user_input: str):
-    chosen_ability = json.loads(json_user_input)[0]
+def receive_from_frontend(ai_action: str):
+    chosen_ability = json.loads(read_file())
     if previous_action.startswith("Buff") or previous_action.startswith("Debuff"):
         process_input_from_ai(previous_action)
     if chosen_ability[0].starts_with("Buff") or chosen_ability[0].starts_with("Debuff"):
