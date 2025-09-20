@@ -67,6 +67,8 @@ def process_input_from_ai(input: str):
 
 def get_ai_action(action: str):
     previous_action = action
+    #temporary while I work on the learning
+    return random.sample(pull_abilities())
 
 def roll():
     return random.randint(1, 10)
