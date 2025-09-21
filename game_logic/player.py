@@ -4,12 +4,12 @@
         # Sends: HP(AbilityOne, AbilityTwo, AbilityThree)
         # Returns: Ability
 import random
-ability_list = ["Attack", "Defend", "Strong Attack", "Debuff Defense", "Debuff Attack", "Buff Defense", "Buff Attack"]
+ability_list = ["Attack", "Defend", "Debuff Defense", "Debuff Attack", "Buff Defense", "Buff Attack"]
 
 class Player:
     hit_points: int = 50
     # BUFF ATT, BUFF DEF, DEBUFF ATT, DEBUFF DEF
-    buffs: list[int] = [0 for i in range(3)]
+    buffs: list[int] = [0 for i in range(4)]
     def __init__(self):
         self.hit_points = random.randint(40, 60)
         self.buffs = []
@@ -36,17 +36,17 @@ class Player:
 
     def getAttack(self) -> int:
         buff = 0
-        if self.buffs[0] != 0:
+        if self.buffs[0] > 0:
             buff += 2
-        if self.buffs[2] != 0:
+        if self.buffs[2] > 0:
             buff -= 2
         return buff
 
     def getDefense(self) -> int:
         buff = 0
-        if self.buffs[1] != 0:
+        if self.buffs[1] > 0:
             buff += 2
-        if self.buffs[3] != 0:
+        if self.buffs[3] > 0:
             buff -= 2
         return buff
 

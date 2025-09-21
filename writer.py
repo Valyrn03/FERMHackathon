@@ -1,18 +1,15 @@
 import json
 
-from game_logic.game import send_to_frontend
 
-
-def write_file(string_input: dict) -> int:
+def write_file(result: dict) -> int:
     file = open("state.txt", "r+")
     state: dict = json.loads(file.read())
     if state[0] == 1:
         file.close()
         return 1
 
-    output = send_to_frontend()
-    output["lock"] = 1
-    file.write(json.dumps(output))
+    result["lock"] = 1
+    file.write(json.dumps(result))
     file.close()
     return 0
 

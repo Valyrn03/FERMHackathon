@@ -1,6 +1,11 @@
 # Handles the game loop
 import json
 import random
+import socket
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+import requests
+from requests import Response
 
 from game_logic.player import Player, pull_abilities
 from writer import write_file, read_file
@@ -8,6 +13,11 @@ from writer import write_file, read_file
 player = Player()
 ai_player = Player()
 def initialize():
+    r: Response = requests.post("localhost:8080", data={"tester": 0})
+    print("Printing: ")
+    print(r.status_code)
+    print("Code :)")
+def initializeRound():
     player = Player()
     ai_player = Player()
 
@@ -52,6 +62,8 @@ def receive_from_frontend(ai_action: str):
     elif previous_action is "Attack" and chosen_ability[0] is "Attack":
         player.take_damage(roll() + ai_player.getAttack())
         ai_player.take_damage(roll() + player.getAttack())
+    player.resolve_buffs()
+    ai_player.resolve_buffs()
 
 def process_input_from_player(input: str):
     if input.startswith("Buff"):
@@ -60,7 +72,8 @@ def process_input_from_player(input: str):
         ai_player.add_buff(input.split(" ")[1])
 
 def process_input_from_ai(input: str):
-    if input.startswith("Buff"):
+    if input.startswith("Buff")\
+            :
         ai_player.add_buff(input.split(" ")[1])
     elif input.startswith("Debuff"):
         player.add_buff(input.split(" ")[1])
@@ -73,4 +86,4 @@ def get_ai_action(action: str):
 def roll():
     return random.randint(1, 10)
 
-print(send_to_frontend())
+initialize()
