@@ -17,6 +17,16 @@ function App() {
 
 const useAbilityAndSendToServer = (ability) => {
   console.log(`used ${ability}`)
+  fetch('http://localhost:8000', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name: 'John', age: 30 }),
+  })
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
 }
 
   const renderAbility = (ability) => {
