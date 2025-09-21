@@ -2,26 +2,12 @@ import { useState } from 'react'
 import player1 from './assets/Player-1.png'
 import theAI from './assets/The AI-1.png'
 import './App.css'
-import fs from 'fs';
 
 
 function App() {
-  const [playerHP, setPlayerHP] = useState(0)
-  const [opponentHP, setOpponentHP] = useState(0)
+  const [playerHP, setPlayerHP] = useState(100)
+  const [opponentHP, setOpponentHP] = useState(100)
   const [abilities, setAbilities] = useState(['Punch', 'Kick', 'Run'])
-
-const readFile = () => {
-  fs.readFile('../state.txt', (error, data) => {
-    if (error) {
-      console.log('damn, an error');
-      console.log(error);
-      return;
-    }
-
-    console.log('got data');
-    console.log(data);
-  });
-}
 
   // write to the file and set the mutex so the back end can read it then write to this file
 // namely we will want to write the current state plus the move that was made
@@ -33,33 +19,28 @@ const writeFile = (ability) => {
 
   const renderAbility = (ability) => {
     return (
-      <div className='ability' onClick={() => writeFile(ability)}>{ability}</div>
+      <input key={ability} type='button' className='ability' onClick={() => writeFile(ability)} value={ability}/>
     )
   }
 
-  const renderPlayerArea = (playerName, hitPoints, imageSrc, isHuman) => {
+  const renderPlayerArea = (playerName, hitPoints, imageSrc) => {
     return (
-      <div className="stat-bar">
+      <div className="player-area">
         <h2>{playerName}</h2>
-        <h4>{hitPoints}</h4>
-        <img src={imageSrc} />
-        {isHuman && (
-          <div id="abilities-wrapper">
-            {abilities.map(ability => renderAbility(ability))}
-          </div>
-        )}
+        <h2>{hitPoints}</h2>
+        <img src={imageSrc} width={100} height={100} />
       </div>
     )
   }
 
   return (
     <>
-      <div id="game-area" onClick={() => readFile()}>
-        Insert game graphics here
-      </div>
-      <div id="stat-bars-area">
-        {renderPlayerArea('The Player', playerHP, player1, true)}
+      <div id="player-area-wrapper">
+        {renderPlayerArea('The Player', playerHP, player1)}
         {renderPlayerArea('The AI Opponent', opponentHP, theAI)}
+      </div>
+      <div id="abilities-wrapper">
+        {abilities.map(ability => renderAbility(ability))}
       </div>
     </>
   )
