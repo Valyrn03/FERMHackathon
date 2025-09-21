@@ -44,7 +44,7 @@ def send_to_frontend():
     r = requests.post("localhost:" + str(port), message)
 
 def receive_from_frontend(ai_action: str):
-    r = requests.get("localhost:" + str(port))
+    r = requests.get("localhost:" + str(port + 1))
     if(r == 200):
         print("ERROR IN ACCESSING PORT")
         return
