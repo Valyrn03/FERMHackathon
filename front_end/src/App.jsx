@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import player1 from './assets/Player-1.png'
+import theAI from './assets/The AI-1.png'
 import './App.css'
 import fs from 'fs';
 
@@ -37,11 +37,12 @@ const writeFile = (ability) => {
     )
   }
 
-  const renderPlayerArea = (playerName, hitPoints, isHuman) => {
+  const renderPlayerArea = (playerName, hitPoints, imageSrc, isHuman) => {
     return (
       <div className="stat-bar">
         <h2>{playerName}</h2>
         <h4>{hitPoints}</h4>
+        <img src={imageSrc} />
         {isHuman && (
           <div id="abilities-wrapper">
             {abilities.map(ability => renderAbility(ability))}
@@ -57,8 +58,8 @@ const writeFile = (ability) => {
         Insert game graphics here
       </div>
       <div id="stat-bars-area">
-        {renderPlayerArea('The Player', playerHP, true)}
-        {renderPlayerArea('The AI Opponent', opponentHP)}
+        {renderPlayerArea('The Player', playerHP, player1, true)}
+        {renderPlayerArea('The AI Opponent', opponentHP, theAI)}
       </div>
     </>
   )
