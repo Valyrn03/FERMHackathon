@@ -10,6 +10,8 @@ from requests import Response
 from game_logic.player import Player, pull_abilities
 from writer import write_file, read_file
 
+port = 8080
+
 player = Player()
 ai_player = Player()
 def initialize():
@@ -39,10 +41,15 @@ def send_to_frontend():
     message["ai_action"] = previous_action
     message["ai_buffs"] = [buff[0] for buff in ai_player.buffs]
 
-    write_file(message)
+    r = requests.post("localhost:" + str(port), message)
 
 def receive_from_frontend(ai_action: str):
-    chosen_ability = json.loads(read_file())
+    r = requests.get("localhost:" + str(port))
+    if(r == 200):
+        print("ERROR IN ACCESSING PORT")
+        return
+    text = r.text
+    chosen_ability = text["ability"]
     if previous_action.startswith("Buff") or previous_action.startswith("Debuff"):
         process_input_from_ai(previous_action)
     if chosen_ability[0].starts_with("Buff") or chosen_ability[0].starts_with("Debuff"):
